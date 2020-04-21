@@ -127,13 +127,13 @@ const loop = () => {
 
 
 // Смотрим, какие нажимаются клавиши, и реагируем на них нужным образом
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', (e) => {
   /* Дополнительно проверяем такой момент: если змейка движется, например,
   влево, то ещё одно нажатие влево или вправо ничего не поменяет — змейка продолжит
   двигаться в ту же сторону, что и раньше. 
   Это сделано для того, чтобы не разворачивать весь массив
   со змейкой на лету и не усложнять код игры */
-  
+
   // Стрелка влево
   // Если нажата стрелка влево, и при этом змейка никуда не движется по горизонтали…
   if (e.which === 37 && snake.dx === 0) {
@@ -160,6 +160,31 @@ document.addEventListener('keydown', function(e) {
     snake.dy = grid;
     snake.dx = 0;
   }
+});
+
+const controls = document.querySelector('.controls');
+const buttonUp = controls.querySelector('.up');
+const buttonLeft = controls.querySelector('.left');
+const buttonRight = controls.querySelector('.right');
+const buttonDown = controls.querySelector('.down');
+
+controls.addEventListener('click', (e) => {
+    if (e.target === buttonLeft && snake.dx === 0) {
+      snake.dx = -grid;
+      snake.dy = 0;
+    }
+    else if (e.target === buttonUp && snake.dy === 0) {
+      snake.dy = -grid;
+      snake.dx = 0;
+    }
+    else if (e.target === buttonRight && snake.dx === 0) {
+      snake.dx = grid;
+      snake.dy = 0;
+    }
+    else if (e.target === buttonDown && snake.dy === 0) {
+      snake.dy = grid;
+      snake.dx = 0;
+    }
 });
 
 // Запускаем игру
