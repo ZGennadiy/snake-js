@@ -24,16 +24,23 @@ const snake = {
 
 };
 
-// А это — еда. Представим, что это красные яблоки.
+// А это — еда. Представим, что это яблоки.
 const apple = {
   // Начальные координаты яблока
   x: 320,
   y: 320,
 };
 
+const score = document.querySelector('.currentScore > span');
+const hiScore = document.querySelector('.highScore > span');
+let highScore = localStorage.getItem('highScore') || 0;
+hiScore.innerHTML = String(highScore).padStart(3, '0');
+
 // Генератор случайных чисел в заданном диапазоне
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
+let gameScore = 0;
+score.innerHTML = String(gameScore).padStart(3, '0');
 // Игровой цикл — основной процесс, внутри которого будет всё происходить
 const loop = () => {
   // Хитрая функция, которая замедляет скорость игры с 60 кадров в секунду до 15 (60/15 = 4)
@@ -46,7 +53,8 @@ const loop = () => {
   // Обнуляем переменную скорости
   count = 0;
   // Очищаем игровое поле
-  context.clearRect(0,0,canvas.width,canvas.height);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
 
   // Двигаем змейку с нужной скоростью
   snake.x += snake.dx;
@@ -96,6 +104,14 @@ const loop = () => {
     if (cell.x === apple.x && cell.y === apple.y) {
       // увеличиваем длину змейки
       snake.maxCells += 1;
+      gameScore += 1;
+      score.innerHTML = String(gameScore).padStart(3, '0');
+      if (gameScore > highScore) {
+        highScore = gameScore;
+        localStorage.setItem('highScore', highScore);
+        hiScore.innerHTML = String(highScore).padStart(3, '0');
+
+      }
 
       // Рисуем новое яблочко
       // Помним, что размер холста у нас 400x400, при этом он разбит на ячейки — 25 в каждую сторону
@@ -120,6 +136,9 @@ const loop = () => {
         // Ставим яблочко в случайное место
         apple.x = getRandomInt(0, 25) * grid;
         apple.y = getRandomInt(0, 25) * grid;
+
+        gameScore = 0;
+        score.innerHTML = String(gameScore).padStart(3, '0');
       }
     }
   });
